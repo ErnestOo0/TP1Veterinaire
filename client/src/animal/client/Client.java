@@ -33,12 +33,12 @@ public class Client {
             IDossierSuivi dsStub = (IDossierSuivi) registry.lookup("dossierM");
 
             Observation newO= new Observation("ras");
-            System.out.println("dossier : "+ dsStub.toString());
+            System.out.println("dossier : "+ dsStub.printDossier());
 
             dsStub.nouvelleObservation(newO);
 
             IDossierSuivi dsStub2 = (IDossierSuivi) registry.lookup("dossierM");
-            System.out.println("dossier : "+ dsStub2);
+            System.out.println("dossier : "+ dsStub2.printDossier());
         } catch (Exception e) {
             System.err.println("Client exception: " + e);
             e.printStackTrace();

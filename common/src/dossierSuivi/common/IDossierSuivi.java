@@ -11,4 +11,5 @@ public interface IDossierSuivi extends Remote {
     public void setEtatSante(EtatSante etatSante) throws RemoteException;
     public ArrayList<Observation> getHistorique() throws RemoteException;
     public void nouvelleObservation(Observation o) throws RemoteException;
+    public String printDossier() throws RemoteException;
 }

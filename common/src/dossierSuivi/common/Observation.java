@@ -1,9 +1,10 @@
 package dossierSuivi.common;
 
+import java.io.Serializable;
 import java.util.Date;
 
 //rendre serializable
-public class Observation {
+public class Observation implements Serializable {
     private Date dateObservation;
     private String description;
 

@@ -34,7 +34,7 @@ public class Server {
             System.out.println("Server ready (registre "
                     + (embedded ? "interne" : "externe") + ", port " + PORT + ")");
 
-            TimeUnit.SECONDS.sleep(3);
+            //TimeUnit.SECONDS.sleep(3);
             System.out.println(chien);
             System.out.println(System.identityHashCode(chien));
         } catch (Exception e) {

@@ -39,11 +39,20 @@ public class DossierSuiviImpl extends UnicastRemoteObject implements IDossierSui
         historiqueObservations.add(observation);
     }
 
-    public String toString(){
+    public String printDossier() throws RemoteException {
+        return this.toString();
+    }
+
+    public String toString(){//n'est pas appelé, c'est la fonction de Object qui est appelé
         String s = etatSante.toString();
+        if (historiqueObservations.size() <= 0){
+            return s;
+        }
+        s += ", Historique : {";
         for(Observation o : historiqueObservations){
             s += o.toString() + "\n";
         }
+        s += "}";
         return s;
     }
 
