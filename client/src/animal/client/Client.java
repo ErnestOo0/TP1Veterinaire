@@ -1,6 +1,8 @@
 package animal.client;
 
 import animal.common.IAnimal;
+import dossierSuivi.common.IDossierSuivi;
+import dossierSuivi.common.Observation;
 import espece.common.IEspece;
 
 import java.lang.reflect.Proxy;
@@ -26,6 +28,17 @@ public class Client {
             IEspece e = animalStub.monEspece();
             e.setAgeAvgEspece(3);
             System.out.println(System.identityHashCode(e));
+
+            //A3
+            IDossierSuivi dsStub = (IDossierSuivi) registry.lookup("dossierM");
+
+            Observation newO= new Observation("ras");
+            System.out.println("dossier : "+ dsStub.toString());
+
+            dsStub.nouvelleObservation(newO);
+
+            IDossierSuivi dsStub2 = (IDossierSuivi) registry.lookup("dossierM");
+            System.out.println("dossier : "+ dsStub2);
         } catch (Exception e) {
             System.err.println("Client exception: " + e);
             e.printStackTrace();
