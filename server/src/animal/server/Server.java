@@ -1,9 +1,12 @@
 package animal.server;
 
 import animal.common.IAnimal;
+import espece.common.EspeceImpl;
+import espece.common.IEspece;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.concurrent.TimeUnit;
 
 public class Server {
 
@@ -12,7 +15,11 @@ public class Server {
     public static void main(String[] args) {
         boolean embedded = args.length > 0 && "--embedded".equals(args[0]);
         try {
-            IAnimal obj = new AnimalImpl("Marcel", "Ernest","chien");
+            System.out.println("init du server");
+            IEspece chien = new EspeceImpl("chien",10);
+            System.out.println("init de chien");
+            IAnimal obj = new AnimalImpl("Marcel", "Ernest",chien);
+            System.out.println("init de marcel");
 
             Registry registry = embedded
                     ? LocateRegistry.createRegistry(PORT)
@@ -24,6 +31,10 @@ public class Server {
 
             System.out.println("Server ready (registre "
                     + (embedded ? "interne" : "externe") + ", port " + PORT + ")");
+
+            TimeUnit.SECONDS.sleep(3);
+            System.out.println(chien);
+            System.out.println(System.identityHashCode(chien));
         } catch (Exception e) {
             System.err.println("Server exception: " + e);
             e.printStackTrace();
