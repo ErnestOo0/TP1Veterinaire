@@ -1,6 +1,7 @@
 package animal.server;
 
 import animal.common.IAnimal;
+import cabinet.common.ICabinet;
 import dossierSuivi.common.EtatSante;
 import dossierSuivi.common.IDossierSuivi;
 import espece.common.EspeceImpl;
@@ -20,7 +21,10 @@ public class Server {
             IEspece chien = new EspeceImpl("chien",10);
             IDossierSuivi dossMarcel = new DossierSuiviImpl(EtatSante.BOF);
 
-            IAnimal obj = new AnimalImpl("Marcel", "Ernest",chien, dossMarcel);
+            IAnimal marcel = new AnimalImpl("Marcel", "Ernest",chien, dossMarcel);
+
+            ICabinet c1 = new CabinetImpl();
+            c1.addPatient(marcel);
 
             Registry registry = embedded
                     ? LocateRegistry.createRegistry(PORT)
@@ -28,15 +32,18 @@ public class Server {
 
             // rebind plutot que bind : on peut relancer le serveur sans
             // redemarrer le registre (voir TD 1, question 7).
+
+            /*
             registry.rebind("animal", obj);
             registry.rebind("dossierM", dossMarcel);
+            */
+
+            registry.rebind("cabinet1", c1);
 
             System.out.println("Server ready (registre "
                     + (embedded ? "interne" : "externe") + ", port " + PORT + ")");
 
-            //TimeUnit.SECONDS.sleep(3);
-            System.out.println(chien);
-            System.out.println(System.identityHashCode(chien));
+
         } catch (Exception e) {
             System.err.println("Server exception: " + e);
             e.printStackTrace();
