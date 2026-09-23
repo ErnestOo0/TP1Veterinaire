@@ -1,13 +1,8 @@
-package animal.server;
-
-import dossierSuivi.common.EtatSante;
-import dossierSuivi.common.IDossierSuivi;
-import dossierSuivi.common.Observation;
+package dossierSuivi.common;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.List;
 
 public class DossierSuiviImpl extends UnicastRemoteObject implements IDossierSuivi {
     private EtatSante etatSante;
@@ -40,19 +35,15 @@ public class DossierSuiviImpl extends UnicastRemoteObject implements IDossierSui
     }
 
     public String printDossier() throws RemoteException {
-        return this.toString();
-    }
-
-    public String toString(){//n'est pas appelé, c'est la fonction de Object qui est appelé
-        String s = etatSante.toString();
+        String s = "("+ etatSante.toString();
         if (historiqueObservations.size() <= 0){
-            return s;
+            return s + ")";
         }
         s += ", Historique : {";
         for(Observation o : historiqueObservations){
             s += o.toString() + "\n";
         }
-        s += "}";
+        s += "})";
         return s;
     }
 

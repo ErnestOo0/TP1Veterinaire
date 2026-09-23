@@ -1,15 +1,11 @@
 package animal.server;
 
-import animal.common.IAnimal;
 import cabinet.common.ICabinet;
-import dossierSuivi.common.EtatSante;
-import dossierSuivi.common.IDossierSuivi;
 import espece.common.EspeceImpl;
 import espece.common.IEspece;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.concurrent.TimeUnit;
 
 public class Server {
 
@@ -19,12 +15,12 @@ public class Server {
         boolean embedded = args.length > 0 && "--embedded".equals(args[0]);
         try {
             IEspece chien = new EspeceImpl("chien",10);
-            IDossierSuivi dossMarcel = new DossierSuiviImpl(EtatSante.BOF);
+            /*IDossierSuivi dossMarcel = new DossierSuiviImpl(EtatSante.BOF);
 
-            IAnimal marcel = new AnimalImpl("Marcel", "Ernest",chien, dossMarcel);
-
+            IAnimal marcel = new AnimalImpl("Marcel", "Ernest",chien, dossMarcel);*/
             ICabinet c1 = new CabinetImpl();
-            c1.addPatient(marcel);
+            c1.nouvelleEspeceAcceptee(chien);
+            //c1.addPatient(marcel);
 
             Registry registry = embedded
                     ? LocateRegistry.createRegistry(PORT)

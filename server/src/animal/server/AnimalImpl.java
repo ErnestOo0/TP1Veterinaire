@@ -1,6 +1,7 @@
 package animal.server;
 
 import animal.common.IAnimal;
+import dossierSuivi.common.DossierSuiviImpl;
 import dossierSuivi.common.IDossierSuivi;
 import espece.common.IEspece;
 
@@ -47,6 +48,6 @@ public class AnimalImpl extends UnicastRemoteObject implements IAnimal {
     }
 
     public String allInfos() throws RemoteException{
-        return this.nom + " " + this.nomMaitre + " " + this.espece;
+        return this.nom + " " + this.nomMaitre + " " + this.espece + " " + this.dossierSuivi.printDossier();
     }
 }
