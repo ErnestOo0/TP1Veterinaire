@@ -18,14 +18,15 @@ public class Server {
             /*IDossierSuivi dossMarcel = new DossierSuiviImpl(EtatSante.BOF);
 
             IAnimal marcel = new AnimalImpl("Marcel", "Ernest",chien, dossMarcel);*/
-            ICabinet c1 = new CabinetImpl();
-            c1.nouvelleEspeceAcceptee(chien);
-            //c1.addPatient(marcel);
 
             Registry registry = embedded
                     ? LocateRegistry.createRegistry(PORT)
                     : LocateRegistry.getRegistry(PORT);
 
+
+            ICabinet c1 = new CabinetImpl(registry);
+            c1.nouvelleEspeceAcceptee(chien);
+            //c1.addPatient(marcel);
             // rebind plutot que bind : on peut relancer le serveur sans
             // redemarrer le registre (voir TD 1, question 7).
 

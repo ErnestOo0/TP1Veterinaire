@@ -7,6 +7,7 @@ import dossierSuivi.common.EtatSante;
 import dossierSuivi.common.IDossierSuivi;
 import dossierSuivi.common.Observation;
 import espece.common.IEspece;
+import observateur.common.IObservateur;
 
 import java.lang.reflect.Proxy;
 import java.rmi.registry.LocateRegistry;
@@ -16,13 +17,25 @@ import java.util.ArrayList;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Client {
+    //static IObservateur o;//pour avoir le meme pour tous les clients pas bien car meme les clients pas abonés recevront la notif
+    static int nbClients = 0;
+    //ne marche pas car tournent dans des processus différents -> il faut touver une autre methode
     public static void main(String[] args) {
         String host = (args.length < 1) ? null : args[0];
         try {
+            System.out.println("nbClients " + nbClients);
+            int idClient = nbClients;
+            nbClients+=1;
+
+            IObservateur o = new ObservateurImpl();
+            String nomObserver = "clientObservateur"+idClient;
 
             Registry registry = LocateRegistry.getRegistry(host, 1099);
+            registry.rebind(nomObserver, o);//un observeur par client
+
             System.out.println("connecte");
             ICabinet cabinetStub = (ICabinet) registry.lookup("cabinet1");
+            cabinetStub.abonnement(nomObserver);
 
             IDossierSuivi dossMarcel = new DossierSuiviImpl(EtatSante.BOF);
             dossMarcel.nouvelleObservation(new Observation("ras"));
@@ -35,9 +48,14 @@ public class Client {
             System.out.println("classe du stub : " + cabinetStub.getClass().getName());
             System.out.println("proxy dynamique ? " + Proxy.isProxyClass(cabinetStub.getClass()));
 
+            IDossierSuivi dossBil = new DossierSuiviImpl(EtatSante.PLEINE_FORME);
+            dossBil.nouvelleObservation(new Observation("saute partout"));
+            cabinetStub.nouveauPatient("Billy", "Ernest", chien, dossBil);
+
             //System.out.println("response: " + cabinetStub.allInfos() );
             ArrayList<IAnimal> patientsC1 = cabinetStub.getPatients();
             System.out.println("patients cabinet 1 : ");
+
 
             for (IAnimal a : patientsC1) {
                 System.out.println(a.allInfos());
