@@ -17,7 +17,7 @@ public interface ICabinet extends Remote {
     public ArrayList<IEspece> getEspecesAcceptees() throws RemoteException;
     public IEspece getEspeceAccepteesByName(String name) throws RemoteException;
     public void nouvelleEspeceAcceptee(IEspece e) throws RemoteException;
-    public void abonnement(String nomObservateur) throws RemoteException;
-    public void desabonnement(String nomObservateur) throws RemoteException;
+    public void abonnement(IObservateur obs) throws RemoteException;
+    public void desabonnement(IObservateur obs) throws RemoteException;
 
 }

@@ -16,23 +16,20 @@ import java.util.Map;
 public class CabinetImpl extends UnicastRemoteObject implements ICabinet {
     private ArrayList<IAnimal> patients;
     private ArrayList<IEspece>  especesAcceptees;
-    private HashMap<String, IObservateur> dicoObs;
-    private Registry registry;
+    private ArrayList<IObservateur> listObs;
 
     public CabinetImpl() throws RemoteException {
         super();
         patients = new ArrayList<>();
         especesAcceptees = new ArrayList<>();
-        dicoObs = new HashMap<>();
-        registry = null;
+        listObs = new ArrayList<>();
     }
 
     public CabinetImpl(Registry registry) throws RemoteException {
         super();
         patients = new ArrayList<>();
         especesAcceptees = new ArrayList<>();
-        dicoObs = new HashMap<>();
-        this.registry = registry;
+        listObs = new ArrayList<>();
     }
 
     public ArrayList<IAnimal> getPatients() throws RemoteException {
@@ -50,9 +47,13 @@ public class CabinetImpl extends UnicastRemoteObject implements ICabinet {
     }
 
     private void notifyClients(int seuil) throws RemoteException {
-        for(Map.Entry<String, IObservateur> e : dicoObs.entrySet()){
-            System.out.println("Notification "+ e.getKey() +", seuil = "+seuil);
-            e.getValue().sueilFranchis(seuil);
+        for(IObservateur o : listObs){
+            try{
+                o.sueilFranchis(seuil);
+            }catch(RemoteException e){
+                listObs.remove(o);
+            }
+
         }
     }
 
@@ -95,20 +96,15 @@ public class CabinetImpl extends UnicastRemoteObject implements ICabinet {
         return nouvA ;
     }
 
-    public void abonnement(String nomObservateur) throws RemoteException {
-        try{
-            System.out.println(nomObservateur+ " abonné");
-            IObservateur o = (IObservateur) registry.lookup(nomObservateur);
-            dicoObs.put(nomObservateur,o);
-            o.sueilFranchis(0);
-        }catch(Exception e) {
-            System.err.println("Cabinet exception: " + e);
-            e.printStackTrace();
+    public void abonnement(IObservateur obs) throws RemoteException {
+
+        if(!listObs.contains(obs)){
+            listObs.add(obs);
         }
     }
 
     @Override
-    public void desabonnement(String nomObservateur) throws RemoteException {
-        dicoObs.remove(nomObservateur);
+    public void desabonnement(IObservateur obs) throws RemoteException {
+        listObs.remove(obs);
     }
 }

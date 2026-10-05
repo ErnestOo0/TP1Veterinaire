@@ -18,24 +18,21 @@ import java.util.ArrayList;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Client {
     //static IObservateur o;//pour avoir le meme pour tous les clients pas bien car meme les clients pas abonés recevront la notif
-    static int nbClients = 0;
-    //ne marche pas car tournent dans des processus différents -> il faut touver une autre methode
+
     public static void main(String[] args) {
         String host = (args.length < 1) ? null : args[0];
         try {
-            System.out.println("nbClients " + nbClients);
-            int idClient = nbClients;
-            nbClients+=1;
+
 
             IObservateur o = new ObservateurImpl();
-            String nomObserver = "clientObservateur"+idClient;
+            //String nomObserver = "clientObservateur"+idClient;
 
             Registry registry = LocateRegistry.getRegistry(host, 1099);
-            registry.rebind(nomObserver, o);//un observeur par client
 
             System.out.println("connecte");
             ICabinet cabinetStub = (ICabinet) registry.lookup("cabinet1");
-            cabinetStub.abonnement(nomObserver);
+            //cabinet pourait attribuer un id de client
+            cabinetStub.abonnement(o);
 
             IDossierSuivi dossMarcel = new DossierSuiviImpl(EtatSante.BOF);
             dossMarcel.nouvelleObservation(new Observation("ras"));
