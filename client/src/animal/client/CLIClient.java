@@ -23,7 +23,7 @@ public class CLIClient {
                 System.out.println(listText.get(i) + " : " + (i+1));
             }
 
-            choix = demanderChoix("Faitent votre choix entre 1 et "+listText.size(), scanner);
+            choix = demanderChoix("Faites votre choix entre 1 et "+listText.size(), scanner);
             while(choix<1 || choix>listText.size()){
                 choix = demanderChoix("Choix incorect, entrez une valeur entre 1 et "+listText.size(), scanner);
             }

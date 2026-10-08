@@ -1,5 +1,10 @@
 package animal.client;
 
+import observateur.common.IObservateur;
+
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class EntreeClient {
@@ -12,7 +17,6 @@ public class EntreeClient {
 
 
             IObservateur o = new ObservateurImpl();
-            //String nomObserver = "clientObservateur"+idClient;
 
             Registry registry = LocateRegistry.getRegistry(host, 1099);
 
@@ -51,8 +55,16 @@ public class EntreeClient {
 
          */
 
-        CLIVeterinaire cli = new CLIVeterinaire();
+        try{
+            IObservateur o = new ObservateurImpl();
+            Registry registry = LocateRegistry.getRegistry(host, 1099);
+            LogiqueClient client = new LogiqueClient(o, registry);
+            CLIVeterinaire cli = new CLIVeterinaire();
 
-        cli.menuAccueil();
+            cli.menuAccueil();
+        }catch (Exception e) {
+            System.err.println("Client exception: " + e);
+            e.printStackTrace();
+        }
     }
 }
