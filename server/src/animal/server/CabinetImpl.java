@@ -10,22 +10,13 @@ import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CabinetImpl extends UnicastRemoteObject implements ICabinet {
-    private ArrayList<IAnimal> patients;
-    private ArrayList<IEspece>  especesAcceptees;
-    private ArrayList<IObservateur> listObs;
+    private final ArrayList<IAnimal> patients;
+    private final ArrayList<IEspece>  especesAcceptees;
+    private final ArrayList<IObservateur> listObs;
 
     public CabinetImpl() throws RemoteException {
-        super();
-        patients = new ArrayList<>();
-        especesAcceptees = new ArrayList<>();
-        listObs = new ArrayList<>();
-    }
-
-    public CabinetImpl(Registry registry) throws RemoteException {
         super();
         patients = new ArrayList<>();
         especesAcceptees = new ArrayList<>();
@@ -43,7 +34,6 @@ public class CabinetImpl extends UnicastRemoteObject implements ICabinet {
             }
         }
         return null;
-        //gérer l'erreur
     }
 
     private void notifyClients(int seuil) throws RemoteException {
@@ -94,6 +84,10 @@ public class CabinetImpl extends UnicastRemoteObject implements ICabinet {
         IAnimal nouvA = new AnimalImpl(nom, nomMaitre, espece, doss);
         addPatient(nouvA);
         return nouvA ;
+    }
+
+    public boolean isAbonnne(IObservateur obs) throws RemoteException{
+        return listObs.contains(obs);
     }
 
     public void abonnement(IObservateur obs) throws RemoteException {

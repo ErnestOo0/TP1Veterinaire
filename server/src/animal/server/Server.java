@@ -24,7 +24,7 @@ public class Server {
                     : LocateRegistry.getRegistry(PORT);
 
 
-            ICabinet c1 = new CabinetImpl(registry);
+            ICabinet c1 = new CabinetImpl();
             c1.nouvelleEspeceAcceptee(chien);
             //c1.addPatient(marcel);
             // rebind plutot que bind : on peut relancer le serveur sans

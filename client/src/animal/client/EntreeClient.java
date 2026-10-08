@@ -1,5 +1,6 @@
 package animal.client;
 
+import cabinet.common.ICabinet;
 import observateur.common.IObservateur;
 
 import java.rmi.registry.LocateRegistry;
@@ -58,8 +59,9 @@ public class EntreeClient {
         try{
             IObservateur o = new ObservateurImpl();
             Registry registry = LocateRegistry.getRegistry(host, 1099);
-            LogiqueClient client = new LogiqueClient(o, registry);
-            CLIVeterinaire cli = new CLIVeterinaire();
+            ICabinet cabinetStub = (ICabinet) registry.lookup("cabinet1");
+            LogiqueClient client = new LogiqueClient(o, cabinetStub);
+            CLIVeterinaire cli = new CLIVeterinaire(client);
 
             cli.menuAccueil();
         }catch (Exception e) {

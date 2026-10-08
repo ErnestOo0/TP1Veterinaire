@@ -47,6 +47,10 @@ public class AnimalImpl extends UnicastRemoteObject implements IAnimal {
         return this.espece;
     }
 
+    public IDossierSuivi monDossierSuivi() throws RemoteException{
+        return this.dossierSuivi;
+    }
+
     public String allInfos() throws RemoteException{
         return this.nom + " " + this.nomMaitre + " " + this.espece + " " + this.dossierSuivi.printDossier();
     }

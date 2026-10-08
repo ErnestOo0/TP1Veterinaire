@@ -1,6 +1,8 @@
 package animal.client;
 
 import animal.common.IAnimal;
+import cabinet.common.ICabinet;
+import dossierSuivi.common.Observation;
 import espece.common.IEspece;
 import observateur.common.IObservateur;
 
@@ -10,53 +12,48 @@ import java.util.ArrayList;
 
 public class LogiqueClient {
     private IObservateur observateur;
-    private Registry registry;
+    private ICabinet stubCabinet;
 
-    public LogiqueClient(){
-        observateur = null;
-        registry = null;
-    }
-
-    public LogiqueClient(IObservateur observateur, Registry registry){
+    public LogiqueClient(IObservateur observateur, ICabinet stubCabinet){
         this.observateur = observateur;
-        this.registry = registry;
+        this.stubCabinet = stubCabinet;
     }
 
-
-    ArrayList<IAnimal> getAllPatients() {
-        return null;
-        //to do
+    ArrayList<IAnimal> getAllPatients() throws RemoteException {
+        return stubCabinet.getPatients();//verifications ?
     }
 
-    IAnimal getPatientsByName(IAnimal animal) {
-        return null;
-        //to do
+    IAnimal getPatientsByName(String nom) throws RemoteException {
+        return stubCabinet.getPatientByName(nom);
     }
 
-    void ajouterObservation(IObservateur observation, IAnimal animal) {
-        //to do
+    void ajouterObservation(IAnimal animal, String observText) throws RemoteException {
+        animal.monDossierSuivi().nouvelleObservation(new Observation(observText));
+        //verification
     }
 
-    void ajouterPatient(IAnimal animal) {
-        //to do
+    void ajouterPatient(IAnimal animal) throws RemoteException {
+        stubCabinet.addPatient(animal);
+        //verification
     }
 
-    IEspece getAllEspeces(){
-        return null;
-        //to do
+    ArrayList<IEspece> getAllEspeces() throws RemoteException {
+        return stubCabinet.getEspecesAcceptees();
     }
 
-    boolean isAbonne(IObservateur o){
-        return false;
-        //to do
+    boolean isAbonne() throws RemoteException {
+        return stubCabinet.isAbonnne(observateur);
+        //verification
     }
 
-    void abonnement(IObservateur o){
-        //to do
+    void abonnement() throws RemoteException {
+        stubCabinet.abonnement(observateur);
+        //verification
     }
 
-    void desabonnement(IObservateur o){
-        //to do
+    void desabonnement() throws RemoteException {
+        stubCabinet.desabonnement(observateur);
+        //verification
     }
 
 
