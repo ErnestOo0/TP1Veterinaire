@@ -30,17 +30,31 @@ public class CLIClient {
         int choix;
         //on affiche toutes les possibilitées avec le nombre a rentrer pour y acceder
         for(int i=0; i<listText.size(); i++){
-                System.out.println(listText.get(i) + " : " + (i+1));
+                System.out.println(listText.get(i) + " [" + (i+1)+ "]");
             }
 
-            choix = demanderChoix("Faites votre choix entre 1 et "+listText.size());
-            while(choix<1 || choix>listText.size()){
-                choix = demanderChoix("Choix incorect, entrez une valeur entre 1 et "+listText.size());
-            }
+        choix = demanderChoix("Faites votre choix entre 1 et "+listText.size());
+        while(choix<1 || choix>listText.size()){
+            choix = demanderChoix("Choix incorect, entrez une valeur entre 1 et "+listText.size());
+        }
         listActions.get(choix-1).run();
     }
 
-    Boolean validation(String textAffich){
+    int choixSelection(ArrayList<String> propsitions){
+        int choix;
+        //on affiche toutes les possibilitées avec le nombre a rentrer pour y acceder
+        for(int i=0; i<propsitions.size(); i++){
+            System.out.println(propsitions.get(i) + " [" + (i+1)+ "]");
+        }
+
+        choix = demanderChoix("Faites votre choix entre 1 et "+listText.size());
+        while(choix<1 || choix>listText.size()){
+            choix = demanderChoix("Choix incorect, entrez une valeur entre 1 et "+listText.size());
+        }
+        return choix-1;
+    }
+
+    static Boolean validation(String textAffich){
         System.out.print(textAffich+" [Y/N]");
         if(scanner.nextLine().equals("Y")){
             return true;
@@ -48,9 +62,14 @@ public class CLIClient {
         return false;
     }
 
-    String demanderString(String textAffich){
+    static String demanderString(String textAffich){
         System.out.print(textAffich+" : ");
         return scanner.nextLine();
+    }
+
+    static int demanderint(String textAffich){
+        System.out.print(textAffich+" : ");
+        return scanner.nextInt();
     }
 
 }

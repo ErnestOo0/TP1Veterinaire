@@ -14,10 +14,6 @@ public class Server {
     public static void main(String[] args) {
         boolean embedded = args.length > 0 && "--embedded".equals(args[0]);
         try {
-            IEspece chien = new EspeceImpl("chien",10);
-            /*IDossierSuivi dossMarcel = new DossierSuiviImpl(EtatSante.BOF);
-
-            IAnimal marcel = new AnimalImpl("Marcel", "Ernest",chien, dossMarcel);*/
 
             Registry registry = embedded
                     ? LocateRegistry.createRegistry(PORT)
@@ -25,15 +21,6 @@ public class Server {
 
 
             ICabinet c1 = new CabinetImpl();
-            c1.nouvelleEspeceAcceptee(chien);
-            //c1.addPatient(marcel);
-            // rebind plutot que bind : on peut relancer le serveur sans
-            // redemarrer le registre (voir TD 1, question 7).
-
-            /*
-            registry.rebind("animal", obj);
-            registry.rebind("dossierM", dossMarcel);
-            */
 
             registry.rebind("cabinet1", c1);
 

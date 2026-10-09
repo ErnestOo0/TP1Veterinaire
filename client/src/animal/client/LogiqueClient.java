@@ -2,6 +2,8 @@ package animal.client;
 
 import animal.common.IAnimal;
 import cabinet.common.ICabinet;
+import dossierSuivi.common.DossierSuiviImpl;
+import dossierSuivi.common.EtatSante;
 import dossierSuivi.common.Observation;
 import espece.common.IEspece;
 import observateur.common.IObservateur;
@@ -23,18 +25,25 @@ public class LogiqueClient {
         return stubCabinet.getPatients();//verifications ?
     }
 
-    IAnimal getPatientsByName(String nom) throws RemoteException {
+    IAnimal getPatientByName(String nom) throws RemoteException {
         return stubCabinet.getPatientByName(nom);
     }
 
     void ajouterObservation(IAnimal animal, String observText) throws RemoteException {
-        animal.monDossierSuivi().nouvelleObservation(new Observation(observText));
+        if(stubCabinet.isPatient(animal)){//si un autre client supprime pendant que l'on écrit
+            animal.monDossierSuivi().nouvelleObservation(new Observation(observText));
+        }
         //verification
     }
 
-    void ajouterPatient(IAnimal animal) throws RemoteException {
-        stubCabinet.addPatient(animal);
+    void ajouterPatient(String nom, String nomMaitre, IEspece espece, EtatSante etatSante) throws RemoteException {
+        DossierSuiviImpl ds = new DossierSuiviImpl(etatSante);
+        stubCabinet.nouveauPatient(nom, nomMaitre, espece, ds);
         //verification
+    }
+
+    void supprimerPatient(IAnimal patient) throws RemoteException {
+        stubCabinet.deletePatient(patient);
     }
 
     ArrayList<IEspece> getAllEspeces() throws RemoteException {
@@ -55,6 +64,8 @@ public class LogiqueClient {
         stubCabinet.desabonnement(observateur);
         //verification
     }
-
+    IEspece ajouterEspece(String nom, int esoeranceVie) throws RemoteException {
+        return stubCabinet.nouvelleEspeceAcceptee(nom, esoeranceVie);
+    }
 
 }

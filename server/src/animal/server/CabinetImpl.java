@@ -3,6 +3,7 @@ package animal.server;
 import animal.common.IAnimal;
 import cabinet.common.ICabinet;
 import dossierSuivi.common.IDossierSuivi;
+import espece.common.EspeceImpl;
 import espece.common.IEspece;
 import observateur.common.IObservateur;
 
@@ -25,6 +26,10 @@ public class CabinetImpl extends UnicastRemoteObject implements ICabinet {
 
     public ArrayList<IAnimal> getPatients() throws RemoteException {
         return patients;
+    }
+
+    public boolean isPatient(IAnimal animal) throws RemoteException{
+        return patients.contains(animal);
     }
 
     public IAnimal getPatientByName(String name) throws RemoteException {
@@ -72,18 +77,24 @@ public class CabinetImpl extends UnicastRemoteObject implements ICabinet {
         return null;
     }
 
-    public void nouvelleEspeceAcceptee(IEspece e) throws RemoteException {
-        if(!especesAcceptees.contains(e)){
-            especesAcceptees.add(e);
-            return;
+    public IEspece nouvelleEspeceAcceptee(String nom, int esperanceVie) throws RemoteException {
+        IEspece newE = new EspeceImpl(nom, esperanceVie);
+        if(!especesAcceptees.contains(newE)){
+            especesAcceptees.add(newE);
+            return newE;
         }
         System.out.println("espece deja acceptée");
+        return newE;
     }
 
     public IAnimal nouveauPatient(String nom, String nomMaitre, IEspece espece, IDossierSuivi doss) throws RemoteException{
         IAnimal nouvA = new AnimalImpl(nom, nomMaitre, espece, doss);
         addPatient(nouvA);
         return nouvA ;
+    }
+
+    public void deletePatient(IAnimal patient) throws RemoteException{
+        patients.remove(patient);
     }
 
     public boolean isAbonnne(IObservateur obs) throws RemoteException{
