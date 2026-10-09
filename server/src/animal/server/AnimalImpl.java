@@ -57,7 +57,6 @@ public class AnimalImpl extends UnicastRemoteObject implements IAnimal {
         res += "Maitre : " + this.nomMaitre + "\n";
         res += "Espece : " + this.espece + "\n";
         res += "DossierSuivi : " + this.dossierSuivi.printDossier() + "\n";
-        System.out.println("DossierSuivi : " + this.dossierSuivi.printDossier() + "\n");
         return res;
     }
 

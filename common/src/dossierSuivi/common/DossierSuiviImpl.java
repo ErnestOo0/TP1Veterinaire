@@ -44,7 +44,6 @@ public class DossierSuiviImpl extends UnicastRemoteObject implements IDossierSui
             s += o.printObservation() + "\n";
         }
         s += "})";
-        System.out.println("historique null : "+ historiqueObservations.isEmpty());
         return s;
     }
 

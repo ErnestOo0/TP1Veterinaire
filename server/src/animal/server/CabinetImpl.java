@@ -30,7 +30,6 @@ public class CabinetImpl extends UnicastRemoteObject implements ICabinet {
     }
 
     public boolean isPatient(IAnimal animal) throws RemoteException{
-        System.out.println("est contenu ?");
         for(IAnimal p : patients){
             if(p.isEquals(animal)){
                 return true;
@@ -59,15 +58,20 @@ public class CabinetImpl extends UnicastRemoteObject implements ICabinet {
         }
     }
 
+    private boolean seuilFranchis() throws RemoteException {
+        if(patients.size() == 3 || patients.size() == 100 || patients.size() == 500 || patients.size() == 1000){
+            notifyClients(patients.size());
+            return true;
+        }
+        return false;
+    }
+
     public void addPatient(IAnimal a) throws RemoteException {
         //if nom existe deja, indiquer au client : possibilité de fusionnet les historiques
         //les animaux sont des objets qui agissent comme un id, deux animaux peuvent avoir le meme nom
         if(!patients.contains(a)){
             patients.add(a);
-            System.out.println("nb patients = "+patients.size());
-            if(patients.size() == 3 || patients.size() == 100 || patients.size() == 500 || patients.size() == 1000){
-                notifyClients(patients.size());
-            }
+            seuilFranchis();
         }
     }
 
@@ -105,18 +109,14 @@ public class CabinetImpl extends UnicastRemoteObject implements ICabinet {
         for(IAnimal p : patients){
             if(p.isEquals(a)){
                 patients.remove(p);
+                seuilFranchis();
                 return;
             }
         }
     }
 
     public void deletePatient(IAnimal patient) throws RemoteException{
-        System.out.println("Supression du patient : "+patient.stringInfos());
-        System.out.println("nbPatients avant supression = "+patients.size());
-        System.out.println("is patient ? "+isPatient(patient));
         removePatient(patient);
-        System.out.println("nbPatients apres supression = "+patients.size());
-
     }
 
     public boolean isAbonnne(IObservateur obs) throws RemoteException{

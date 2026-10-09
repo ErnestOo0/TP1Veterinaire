@@ -38,7 +38,6 @@ public class Observation implements Serializable {
     }
 
     public String printObservation() {
-        System.out.println("dossier du client à afficher["+dateObservation.toString() +"] : " + description);
         return "["+dateObservation.toString() +"] : " + description;
     }
 
