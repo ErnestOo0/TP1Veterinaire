@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class CLIVeterinaire{
     private final LogiqueClient lc;//logique client associée
-
+    private final String separateur = "-------------";
     public CLIVeterinaire(LogiqueClient lc){
         this.lc = lc;
     }
@@ -22,6 +22,7 @@ public class CLIVeterinaire{
     }
 
     void addObservation(IAnimal animal) throws RemoteException {
+        System.out.println(separateur);
         String observText = CLIClient.demanderString("Entrez votre observation ou rien pour annuler");
         if (!observText.isEmpty()){
             lc.ajouterObservation(animal, observText);
@@ -32,7 +33,7 @@ public class CLIVeterinaire{
     }
 
     void dltPatient(IAnimal patient) throws RemoteException {
-        if(CLIClient.validation("êtes vous sur de vouloir suprimer le patient X")){
+        if(CLIClient.validation("êtes vous sur de vouloir suprimer le patient "+patient.monNom())){
             lc.supprimerPatient(patient);
             System.out.println("Patient supprimé");
             menuPatient();
@@ -41,57 +42,39 @@ public class CLIVeterinaire{
         }
     }
 
-    void detailPatient(IAnimal a) throws RemoteException {
-        CLIClient c = new CLIClient();
-        //print le dossier
-        c.addChoix("supprimer le patient", ()-> dltPatient(a));
-        c.addChoix("Ajouter une observation", ()->addObservation(a));
-        c.addChoix("Retour", this::menuPatient);
-
-        c.afficherInterface();
+    void afficherDossierPatient(IAnimal patient) throws RemoteException {
+        System.out.println("--Dossier :--");
+        System.out.println(patient.stringInfos());
+        System.out.println(separateur);
     }
 
-    @Deprecated
-    void menuListPatients() throws RemoteException {
+    void modifierEtatSante(IAnimal animal) throws RemoteException {
+        System.out.println(separateur);
+        lc.modifierEtatSante(animal,SelectEtatSante());
+        detailPatient(animal);
+    }
 
+    void detailPatient(IAnimal a) throws RemoteException {
+        System.out.println(separateur);
         CLIClient c = new CLIClient();
-        System.out.println("entrez le numéro asocié au patient pour accéder à sa fiche");
-        c.addChoix("Retour", this::menuPatient);
-        ArrayList<IAnimal> listPatients = lc.getAllPatients();
-
-        for(IAnimal a : listPatients){
-            c.addChoix(a.monNom(),()->detailPatient(a));
-        }
+        afficherDossierPatient(a);
+        c.addChoix("supprimer le patient", ()-> dltPatient(a));
+        c.addChoix("Modifier l'état de santé",()->modifierEtatSante(a));
+        c.addChoix("Ajouter une observation", ()->addObservation(a));
+        c.addChoix("<- Retour", this::menuPatient);
 
         c.afficherInterface();
-
     }
 
     IEspece ajoutEspece() throws RemoteException {
+        System.out.println(separateur);
         String nom = CLIClient.demanderString("Nom de l'espece");
-        int esperenceVIe = CLIClient.demanderint("esperence de vie");
+        int esperenceVIe = CLIClient.demanderInt("esperence de vie");
         return lc.ajouterEspece(nom, esperenceVIe);
     }
 
-    @Deprecated
-    IEspece selectEspece() throws RemoteException {
-        CLIClient c = new CLIClient();
-        ArrayList<IEspece> listEspeces = lc.getAllEspeces();
-        if(listEspeces.isEmpty()){
-            System.out.println("Aucune espece enregistrée");
-            return null;
-        }
-        ArrayList<String> nomEspeces = new ArrayList<>();
-        for(IEspece e : listEspeces){
-            nomEspeces.add(e.nomEspece());
-        }
-        return listEspeces.get(c.choixSelection(nomEspeces));
-
-        //ajouter espece
-    }
-
-
     IEspece menuEspeces() throws RemoteException {
+        System.out.println(separateur);
         CLIClient c = new CLIClient();
         ArrayList<String> propals = new ArrayList<>();
         propals.add("Ajouter une espece");
@@ -138,7 +121,7 @@ public class CLIVeterinaire{
     }
 
     void addPatient()throws RemoteException {
-
+        System.out.println(separateur);
         IEspece e = menuEspeces();
         String n = selectNom();
         String m = selectNomMaitre();
@@ -154,6 +137,7 @@ public class CLIVeterinaire{
     }
 
     void chercherPatient() throws RemoteException {
+        System.out.println(separateur);
         String patientName = CLIClient.demanderString("entrez le nom d'un patient");
         IAnimal patient = lc.getPatientByName(patientName);
         if(patient != null){
@@ -178,12 +162,13 @@ public class CLIVeterinaire{
 
         }
 
+        System.out.println(separateur);
         c.addChoix("Rechercher un patient", this::chercherPatient);
         c.addChoix("Ajouter un patient", this::addPatient);
         for(IAnimal a : listPatients){
             c.addChoix(a.monNom(),()->detailPatient(a));
         }
-        c.addChoix("Retour", this::menuAccueil);
+        c.addChoix("<- Retour", this::menuAccueil);
 
         c.afficherInterface();
     }
@@ -216,12 +201,12 @@ public class CLIVeterinaire{
             pasImplementePage();
             menuAccueil();
         };
-
+        System.out.println(separateur);
         c.addChoix("Patients", this::menuPatient);
         if(lc.isAbonne()){
-            c.addChoix("Abonnement", this::abonnement);
-        }else{
             c.addChoix("Desabonnement", this::desabonnement);
+        }else{
+            c.addChoix("Abonnement", this::abonnement);
         }
         c.addChoix("Quitter", this::quitter);
 

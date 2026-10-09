@@ -7,6 +7,7 @@ import espece.common.IEspece;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Objects;
 
 public class AnimalImpl extends UnicastRemoteObject implements IAnimal {
     private String nom;
@@ -51,7 +52,20 @@ public class AnimalImpl extends UnicastRemoteObject implements IAnimal {
         return this.dossierSuivi;
     }
 
-    public String allInfos() throws RemoteException{
-        return this.nom + " " + this.nomMaitre + " " + this.espece + " " + this.dossierSuivi.printDossier();
+    public String stringInfos() throws RemoteException{
+        String res = "Nom : " + this.nom + "\n";
+        res += "Maitre : " + this.nomMaitre + "\n";
+        res += "Espece : " + this.espece + "\n";
+        res += "DossierSuivi : " + this.dossierSuivi.printDossier() + "\n";
+        System.out.println("DossierSuivi : " + this.dossierSuivi.printDossier() + "\n");
+        return res;
+    }
+
+    public boolean isEquals(IAnimal animal) throws RemoteException {
+        if(!(this.nom.equals(animal.monNom()))) return false;
+        if(!(this.nomMaitre.equals(animal.monMaitre()))) return false;
+        if(!(this.espece.isEquals(animal.monEspece())))return false;
+        if(!(this.dossierSuivi.isEquals(animal.monDossierSuivi())))return false;
+        return true;
     }
 }

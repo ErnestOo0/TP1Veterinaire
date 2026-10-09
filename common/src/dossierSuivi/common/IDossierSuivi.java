@@ -12,4 +12,5 @@ public interface IDossierSuivi extends Remote {
     public ArrayList<Observation> getHistorique() throws RemoteException;
     public void nouvelleObservation(Observation o) throws RemoteException;
     public String printDossier() throws RemoteException;
+    public boolean isEquals(IDossierSuivi o) throws RemoteException;
 }

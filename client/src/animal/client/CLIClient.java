@@ -2,6 +2,7 @@ package animal.client;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class CLIClient {
@@ -15,9 +16,9 @@ public class CLIClient {
         listActions = new ArrayList<>();
     }
 
+    @Deprecated
     int demanderChoix(String textAffich){
-        System.out.print(textAffich+" : ");
-        return scanner.nextInt();
+        return demanderInt(textAffich);
     }
 
     void addChoix(String text, IAffichage action){
@@ -33,9 +34,9 @@ public class CLIClient {
                 System.out.println(listText.get(i) + " [" + (i+1)+ "]");
             }
 
-        choix = demanderChoix("Faites votre choix entre 1 et "+listText.size());
+        choix = demanderInt("Faites votre choix entre 1 et "+listText.size());
         while(choix<1 || choix>listText.size()){
-            choix = demanderChoix("Choix incorect, entrez une valeur entre 1 et "+listText.size());
+            choix = demanderInt("Choix incorect, entrez une valeur entre 1 et "+listText.size());
         }
         listActions.get(choix-1).run();
     }
@@ -47,9 +48,9 @@ public class CLIClient {
             System.out.println(propsitions.get(i) + " [" + (i+1)+ "]");
         }
 
-        choix = demanderChoix("Faites votre choix entre 1 et "+listText.size());
-        while(choix<1 || choix>listText.size()){
-            choix = demanderChoix("Choix incorect, entrez une valeur entre 1 et "+listText.size());
+        choix = demanderInt("Faites votre choix entre 1 et "+propsitions.size());
+        while(choix<1 || choix>propsitions.size()){
+            choix = demanderInt("Choix incorect, entrez une valeur entre 1 et "+listText.size());
         }
         return choix-1;
     }
@@ -67,9 +68,18 @@ public class CLIClient {
         return scanner.nextLine();
     }
 
-    static int demanderint(String textAffich){
+    static int demanderInt(String textAffich){
         System.out.print(textAffich+" : ");
-        return scanner.nextInt();
+        try{
+            int res = scanner.nextInt();
+            scanner.nextLine();//permet d'enlever le \n qui n'est pas pris et de ne pas gener le prochain nextLine
+            return res;
+        }catch(InputMismatchException e){
+            scanner.nextLine();
+            System.out.println("veillez renseigner un nombre dans l'interval indiqué");
+            return demanderInt(textAffich);
+        }
+
     }
 
 }

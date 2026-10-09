@@ -22,5 +22,6 @@ public interface ICabinet extends Remote {
     public boolean isAbonnne(IObservateur obs) throws RemoteException;
     public void abonnement(IObservateur obs) throws RemoteException;
     public void desabonnement(IObservateur obs) throws RemoteException;
+    public void nouvelleObservation(IAnimal animal, String observText) throws RemoteException;
 
 }

@@ -25,7 +25,13 @@ public class EspeceImpl implements IEspece {
         esperanceMoy = age;
     }
 
+    public boolean isEquals(IEspece esp){
+        if(!nom.equals(esp.nomEspece()))return false;
+        if(esperanceMoy != esp.ageAvgEspece())return false;
+        return true;
+    }
+
     public String toString() {
-        return "(" + nom + " " + esperanceMoy + ")";
+        return  nom + " (" + esperanceMoy + ")";
     }
 }

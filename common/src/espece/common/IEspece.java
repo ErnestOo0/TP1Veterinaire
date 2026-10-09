@@ -7,4 +7,5 @@ public interface IEspece extends Serializable {
     float ageAvgEspece();
     void setAgeAvgEspece(float age);
     String toString();
+    public boolean isEquals(IEspece esp);
 }

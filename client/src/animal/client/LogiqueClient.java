@@ -29,9 +29,13 @@ public class LogiqueClient {
         return stubCabinet.getPatientByName(nom);
     }
 
+    void modifierEtatSante(IAnimal animal, EtatSante es) throws RemoteException {
+        animal.monDossierSuivi().setEtatSante(es);
+    }
+
     void ajouterObservation(IAnimal animal, String observText) throws RemoteException {
         if(stubCabinet.isPatient(animal)){//si un autre client supprime pendant que l'on écrit
-            animal.monDossierSuivi().nouvelleObservation(new Observation(observText));
+            stubCabinet.nouvelleObservation(animal, observText);
         }
         //verification
     }

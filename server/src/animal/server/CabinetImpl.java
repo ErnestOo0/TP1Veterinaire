@@ -3,6 +3,7 @@ package animal.server;
 import animal.common.IAnimal;
 import cabinet.common.ICabinet;
 import dossierSuivi.common.IDossierSuivi;
+import dossierSuivi.common.Observation;
 import espece.common.EspeceImpl;
 import espece.common.IEspece;
 import observateur.common.IObservateur;
@@ -29,7 +30,13 @@ public class CabinetImpl extends UnicastRemoteObject implements ICabinet {
     }
 
     public boolean isPatient(IAnimal animal) throws RemoteException{
-        return patients.contains(animal);
+        System.out.println("est contenu ?");
+        for(IAnimal p : patients){
+            if(p.isEquals(animal)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public IAnimal getPatientByName(String name) throws RemoteException {
@@ -93,16 +100,34 @@ public class CabinetImpl extends UnicastRemoteObject implements ICabinet {
         return nouvA ;
     }
 
+    private void removePatient(IAnimal a) throws RemoteException {
+        System.out.println("remove patient "+a.monNom());
+        for(IAnimal p : patients){
+            if(p.isEquals(a)){
+                patients.remove(p);
+                return;
+            }
+        }
+    }
+
     public void deletePatient(IAnimal patient) throws RemoteException{
-        patients.remove(patient);
+        System.out.println("Supression du patient : "+patient.stringInfos());
+        System.out.println("nbPatients avant supression = "+patients.size());
+        System.out.println("is patient ? "+isPatient(patient));
+        removePatient(patient);
+        System.out.println("nbPatients apres supression = "+patients.size());
+
     }
 
     public boolean isAbonnne(IObservateur obs) throws RemoteException{
+        //System.out.println("test abonement : "+listObs.contains(obs));
         return listObs.contains(obs);
     }
 
-    public void abonnement(IObservateur obs) throws RemoteException {
 
+
+    public void abonnement(IObservateur obs) throws RemoteException {
+        //System.out.println("Abonement, deja abonné ?: "+ listObs.contains(obs));
         if(!listObs.contains(obs)){
             listObs.add(obs);
         }
@@ -110,6 +135,12 @@ public class CabinetImpl extends UnicastRemoteObject implements ICabinet {
 
     @Override
     public void desabonnement(IObservateur obs) throws RemoteException {
+        //System.out.println("Desabonement, deja abonné ?: "+ listObs.contains(obs));
         listObs.remove(obs);
     }
+
+    public void nouvelleObservation(IAnimal animal, String observText) throws RemoteException {
+        animal.monDossierSuivi().nouvelleObservation(new Observation(observText));
+    }
+
 }

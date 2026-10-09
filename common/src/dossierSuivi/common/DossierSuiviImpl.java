@@ -39,12 +39,17 @@ public class DossierSuiviImpl extends UnicastRemoteObject implements IDossierSui
         if (historiqueObservations.size() <= 0){
             return s + ")";
         }
-        s += ", Historique : {";
+        s += "\nHistorique : {";
         for(Observation o : historiqueObservations){
-            s += o.toString() + "\n";
+            s += o.printObservation() + "\n";
         }
         s += "})";
+        System.out.println("historique null : "+ historiqueObservations.isEmpty());
         return s;
     }
 
+    public boolean isEquals(IDossierSuivi o) throws RemoteException {
+        if(!this.printDossier().equals(o.printDossier()))return false;
+        return true;
+    }
 }

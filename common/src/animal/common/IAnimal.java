@@ -11,5 +11,6 @@ public interface IAnimal extends Remote {
     public String monMaitre() throws RemoteException;
     public IEspece monEspece() throws RemoteException;
     public IDossierSuivi monDossierSuivi() throws RemoteException;
-    public String allInfos() throws RemoteException;
+    public String stringInfos() throws RemoteException;
+    public boolean isEquals(IAnimal animal) throws RemoteException;
 }
